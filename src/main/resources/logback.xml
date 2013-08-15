@@ -3,19 +3,19 @@
     <!-- コンソールへの出力設定 -->
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <Target>System.out</Target>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%date{yyyy/MM/dd HH:mm:ss.SSS} [%p]%m %C.%M\(%line\) %n</Pattern>
-        </layout>
+        <encoder>
+            <pattern>%date{yyyy/MM/dd HH:mm:ss.SSS}[%p]%m %C{1}.%M\(%line\)[%t]%n</pattern>
+            <!-- this quadruples logging throughput -->
+            <immediateFlush>true</immediateFlush>
+        </encoder>        
     </appender>
 
     <!-- ファイルへの出力設定 -->
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./logs/mylog.log</file>
-       
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>./logs/mylog.log.%d{yyyy-MM-dd}</FileNamePattern>
             <MaxHistory>10</MaxHistory>
-            
         </rollingPolicy>
         <encoder>
             <charset>UTF-8</charset>
@@ -27,15 +27,12 @@
     <!-- 出力するパッケージを設定 -->
     <!-- クラス名を含めないパッケージを設定すると、パッケージ以下のクラスに対して共通設定 -->
     <!-- レベル設定はoff, error, warn, info, debug, trace, all -->
-    <!--
     <logger name="net.treewoods" level="debug">
         <appender-ref ref="file" />
     </logger>
-    -->
     <!-- ルートロガー（デフォルトロガー）のレベルを設定 -->
     <!-- レベル設定はoff, error, warn, info, debug, trace, all -->
     <root level="debug">
         <appender-ref ref="stdout"/>
-        <appender-ref ref="file" />
     </root>
 </configuration> 
