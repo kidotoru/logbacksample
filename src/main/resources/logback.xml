@@ -10,15 +10,19 @@
 
     <!-- ファイルへの出力設定 -->
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <Encoding>UTF-8</Encoding>        
         <file>./logs/mylog.log</file>
-        <append>true</append>
+       
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>./logs/mylog.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <MaxHistory>10</MaxHistory>
+            
         </rollingPolicy>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>%date{yyyy/MM/dd HH:mm:ss.SSS}[%p]%m %C.%M\(%line\)%n</Pattern>
-        </layout>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%date{yyyy/MM/dd HH:mm:ss.SSS}[%p]%m %C{1}.%M\(%line\)[%t]%n</pattern>
+            <!-- this quadruples logging throughput -->
+            <immediateFlush>true</immediateFlush>
+        </encoder>        
     </appender>
     <!-- 出力するパッケージを設定 -->
     <!-- クラス名を含めないパッケージを設定すると、パッケージ以下のクラスに対して共通設定 -->
