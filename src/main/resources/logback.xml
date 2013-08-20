@@ -1,18 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration debug="true">
+    
+    <property name="PATTERN" value="%date{yyyy/MM/dd HH:mm:ss.SSS}[%p]%m %C{1}.%M[%line][%t]%n" />
+    <property name="LOG_PATH" value="./logs/" />
+
     <!-- コンソールへの出力設定 -->
-    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-        <Target>System.out</Target>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date{yyyy/MM/dd HH:mm:ss.SSS}[%p]%m %C{1}.%M\(%line\)[%t]%n</pattern>
+            <pattern>${PATTERN}</pattern>
             <!-- this quadruples logging throughput -->
             <immediateFlush>true</immediateFlush>
         </encoder>        
     </appender>
 
     <!-- ファイルへの出力設定 -->
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./logs/mylog.log</file>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}mylog.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <FileNamePattern>./logs/mylog.log.%d{yyyy-MM-dd}</FileNamePattern>
             <MaxHistory>10</MaxHistory>
@@ -24,15 +27,53 @@
             <immediateFlush>true</immediateFlush>
         </encoder>        
     </appender>
+    <!-- ファイルへの出力設定 -->
+    <appender name="MY_LOGGER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}mylog2.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>./logs/mylog2.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%date{yyyy/MM/dd HH:mm:ss.SSS}[%p]%m %C{1}.%M\(%line\)[%t]%n</pattern>
+            <!-- this quadruples logging throughput -->
+            <immediateFlush>true</immediateFlush>
+        </encoder>        
+    </appender>
+
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>./logs/error.log.%d{yyyy-MM-dd}</FileNamePattern>
+            <MaxHistory>10</MaxHistory>
+        </rollingPolicy>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>error</level>
+    </filter>        
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%date{yyyy/MM/dd HH:mm:ss.SSS}[%p]%m %C{1}.%M\(%line\)[%t]%n</pattern>
+            <!-- this quadruples logging throughput -->
+            <immediateFlush>true</immediateFlush>
+        </encoder>        
+    </appender>
+
+
     <!-- 出力するパッケージを設定 -->
     <!-- クラス名を含めないパッケージを設定すると、パッケージ以下のクラスに対して共通設定 -->
     <!-- レベル設定はoff, error, warn, info, debug, trace, all -->
-    <logger name="net.treewoods" level="debug">
-        <appender-ref ref="file" />
+    <logger name="net.treewoods" level="trace">
+        <appender-ref ref="FILE" />
     </logger>
+    <logger name="MY_LOGGER" level="trace">
+        <appender-ref ref="MY_LOGGER" />
+    </logger>
+
     <!-- ルートロガー（デフォルトロガー）のレベルを設定 -->
     <!-- レベル設定はoff, error, warn, info, debug, trace, all -->
     <root level="debug">
-        <appender-ref ref="stdout"/>
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ERROR"/>
     </root>
 </configuration> 
